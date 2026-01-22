@@ -4,7 +4,7 @@ Homework 1 - Nonlinear Option Pricing
 1. Conditional Expectation and Least Squares Regression
 -------------------------------------------------------------------------------
 
-Je fixe la définition des variables de base (comme dans l'énoncé).
+Je fixe la définition des variables de base.
 
 ```python
 import numpy as np
