@@ -1,18 +1,10 @@
-Homework 1 - Nonlinear Option Pricing (Julien Guyon)
+Homework 1 - Nonlinear Option Pricing
 ====================================================
-
-Ce document est la version finale, redigee comme un rendu etudiant.  
-Il contient les explications et le code pour chaque question, ainsi que
-les resultats numeriques obtenus.
-
-Je conserve le meme plan que le notebook et je mets les codes complets
-afin qu'ils puissent etre executables tels quels.
-
 -------------------------------------------------------------------------------
 1. Conditional Expectation and Least Squares Regression
 -------------------------------------------------------------------------------
 
-Je fixe la definition des variables de base (comme dans l'enonce).
+Je fixe la définition des variables de base (comme dans l'énoncé).
 
 ```python
 import numpy as np
@@ -29,15 +21,15 @@ X = np.random.randn(n)
 Y = g(X) + sigma*np.random.randn(n)
 ```
 
-Question 1.1 (parametric regression)
+Question 1.1 
 ------------------------------------
 
-Je compare l'ajustement par polynomes de degre differents et par
-regression piecewise-lineaire avec un nombre de noeuds variable.
+Je compare l'ajustement par Polynômes de degré différents et par
+régression piecewise-lineaire avec un nombre de noeuds variable.
 L'objectif est d'illustrer le sur-apprentissage : trop de flexibilite
 donne une courbe instable, trop peu donne un sous-ajustement.
 
-Code (polynomes et piecewise-linear)
+Code
 ------------------------------------
 
 ```python
@@ -86,7 +78,7 @@ print("Piecewise-linear test MSE:", pl_mse)
 Resultats (exemple, seed=123)
 -----------------------------
 
-Polynomes (MSE test vs g) :
+Polynômes (MSE test vs g) :
  - deg 1: 0.1054
  - deg 3: 0.0407
  - deg 5: 0.0171
@@ -100,18 +92,18 @@ Piecewise-linear (MSE test) :
  - 15 noeuds: 0.00561
 
 Commentaire :
- - degres 1-3 sous-ajustent la courbe (biais).
- - degre 5 est un bon compromis.
- - degres 9-12 sur-ajustent clairement (oscillations).
+ - degrés 1-3 sous-ajustent la courbe.
+ - degré 5 est un bon compromis.
+ - degrés 9-12 sur-ajustent clairement.
  - piecewise-linear s'ameliore avec 5-9 noeuds, puis se degrade si trop de noeuds.
 
-Question 1.2 (nonparametric regression)
+Question 1.2
 ---------------------------------------
 
-Je teste la regression noyau (Nadaraya-Watson) avec plusieurs largeurs de
+Je teste la régression noyau (Nadaraya-Watson) avec plusieurs largeurs de
 bande, puis je compare deux noyaux.
 
-Code (kernel regression)
+Code
 ------------------------
 
 ```python
@@ -151,7 +143,7 @@ for h in [0.2, 0.4]:
         print(f"kernel={name} h={h} mse={mse}")
 ```
 
-Resultats (exemple, seed=123)
+Résultats (exemple, seed=123)
 -----------------------------
 
 Gaussian kernel :
@@ -176,10 +168,10 @@ Parametres communs :
 S0=100, vol=0.2, r=0.1, q=0.02, K=100, T=1  
 Dates d'exercice mensuelles : ts = linspace(0,1,13)
 
-Question 2.1 (LS et TVR avec regressions alternatives)
+Question 2.1
 ------------------------------------------------------
 
-Procedure :
+Procédure :
 1) Simuler les trajectoires de S_t (Black-Scholes).
 2) Appliquer LS et TVR.
 3) Remplacer la base polynomiale par :
@@ -196,11 +188,11 @@ Resultats (20 000 trajectoires) :
  - TVR (kernel)   : 8.2603
 
 Commentaire :
-Les methodes parametriques sont assez stables.  
-La regression noyau est beaucoup plus sensible a la largeur de bande,
+Les méthodes paramétriques sont assez stables.  
+La régression noyau est beaucoup plus sensible a la largeur de bande,
 ce qui explique la variabilite dans TVR.
 
-Question 2.2 (lower bound avec simulation independante)
+Question 2.2 
 --------------------------------------------------------
 
 Procedure :
@@ -216,61 +208,61 @@ Explication :
 La politique issue de la regression n'est pas necessairement optimale.
 On obtient donc un prix en dessous du prix americain (borne basse).
 
-Question 2.3 (regression seulement ITM)
+Question 2.3 
 ---------------------------------------
 
-Procedure :
-1) Regressions effectuees uniquement sur les trajectoires ITM.
-2) OTM = continuation par definition.
-3) Comparer les prix et tracer les regions d'exercice a t=0.5.
+Procédure :
+1) Régressions effectuées uniquement sur les trajectoires ITM.
+2) OTM = continuation par définition.
+3) Comparer les prix et tracer les régions d'exercice a t=0.5.
 
-Resultats (exemple) :
+Résultats (exemple) :
  - LS poly ITM    : 4.0891
  - LS BS basis ITM: 5.1420
 
 Commentaire :
-L'exercice est concentre sur les niveaux S faibles (ITM profond),
-la continuation domine pour S plus eleve.
+L'exercice est concentré sur les niveaux S faibles (ITM profond),
+la continuation domine pour S plus élevé.
 
-Question 2.4 (Bermudan-Asian call)
+Question 2.4 
 ----------------------------------
 
-Procedure :
+Procédure :
 1) Simuler S_t sur 12 dates.
 2) Calculer A_tn = moyenne des prix jusqu'a t_n.
 3) Payoff : max(A_tn - K, 0).
 4) Regression avec base [1, BS_call(Z_tn)].
    Z_tn = (n*A_tn + (12-n)*S_tn)/12.
-5) LS puis simulation independante pour borne basse.
+5) LS puis simulation indépendante pour borne basse.
 
-Resultats (exemple) :
+Résultats (exemple) :
  - LS price (Z_tn)       : 5.3686
  - Low-biased (100k)     : 4.7471
 
 Pourquoi Z_tn :
-Z_tn est un proxy de la moyenne finale. Il stabilise la regression en
-utilisant a la fois l'information de l'average et du spot courant.
+Z_tn est un proxy de la moyenne finale. Il stabilise la régression en
+utilisant à la fois l'information de l'average et du spot courant.
 
-Question 2.4(b) (reseau de neurones)
+Question 2.4(b)
 ------------------------------------
 
-Procedure :
-1) Reseau feed-forward avec entrees (S_tn, A_tn).
-2) Un reseau par date (comme LS).
+Procédure :
+1) Réseau feed-forward avec entrées (S_tn, A_tn).
+2) Un Réseau par date (comme LS).
 3) Apprentissage avec 3 couches de 20 neurones (ReLU).
-4) Borne basse via simulation independante.
+4) Borne basse via simulation indépendante.
 
-Resultats (exemple, 50 000 traj. entrainement) :
+Résultats (exemple, 50 000 traj. entrainement) :
  - NN LS price : 4.4873
  - NN low-biased (100k) : 4.9590
 
 -------------------------------------------------------------------------------
-Synthese
+Synthèse 
 -------------------------------------------------------------------------------
 
-Q1 : Les degres eleves et trop de noeuds sur-ajustent.  
-Q2.1 : LS et TVR donnent des prix proches avec bases parametriques.  
-Q2.2 : La simulation independante fournit une borne basse.  
+Q1 : Les degrés élevés et trop de noeuds sur-ajustent.  
+Q2.1 : LS et TVR donnent des prix proches avec bases paramétriques.  
+Q2.2 : La simulation indépendante fournit une borne basse.  
 Q2.3 : Le filtrage ITM est plus stable, surtout pour les bases riches.  
-Q2.4 : Z_tn stabilise la regression. Le NN fournit un prix competitif mais
-depend fortement de l'entrainement.
+Q2.4 : Z_tn stabilise la régression. Le NN fournit un prix compétitif mais
+dépend fortement de l'entrainement.
