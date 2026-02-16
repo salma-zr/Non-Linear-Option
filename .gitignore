@@ -1,0 +1,6 @@
+lecture_notes.txt
+materials/
+
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
